@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.feri.mapper.OrderItemMapper">
+  <resultMap id="BaseResultMap" type="com.feri.domain.OrderItem">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="oid" jdbcType="INTEGER" property="oid" />
+    <result column="gid" jdbcType="INTEGER" property="gid" />
+    <result column="count" jdbcType="INTEGER" property="count" />
+    <result column="money" jdbcType="INTEGER" property="money" />
+    <result column="createtime" jdbcType="TIMESTAMP" property="createtime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, oid, gid, count, money, createtime
+  </sql>
+
+  <insert id="insert" parameterType="com.feri.domain.OrderItem">
+    insert into t_orderitem ( oid, gid, count, money ,createtime)
+    values ( #{oid,jdbcType=INTEGER}, #{gid,jdbcType=INTEGER},
+      #{count,jdbcType=INTEGER}, #{money,jdbcType=INTEGER},now()
+      )
+  </insert>
+
+</mapper>

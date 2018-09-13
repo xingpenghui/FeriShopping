@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>锋迷在线商城后台接口</title>
+    <style type="text/css">
+        li{
+            font-size: 30px;
+        }
+    </style>
+</head>
+
+<body>
+
+<h1>
+    非查询接口的返回值：
+    {code:0,msg:'OK',data:null}
+    0表示成功
+</h1>
+<h1>
+    查询商品列表的接口支持分页查询
+</h1>
+
+<ul>
+    <li>
+        <a href="http://47.104.244.134:8080/goodstypelist.do?l=1">商品类型 参数说明l 值为级别 建议为1 目前支持2级</a>
+    </li>
+    <li>
+        <a href="http://47.104.244.134:8080/goodsbytid.do?tid=13&page=1&limit=10">商品列表 参数说明tid 值为类型的序号 建议为13 商品最多 page当前页码 limit 显示的数量</a>
+    </li>
+    <li>
+        <a href="http://47.104.244.134:8080/goodsbyid.do?id=4">商品详情 参数说明id 值为商品序号 </a>
+    </li>
+    <li>
+        <a href="http://47.104.244.134:8080/cartsave.do?gid=4">添加商品到购物车 参数说明gid 值为商品序号 </a>
+    </li>
+    <li>
+        <a href="http://47.104.244.134:8080/cartupdate.do?num=1">修改购物车商品数量 参数说明num 取值：1 加1 -1 减1 0 删除 </a>
+    </li>
+    <li>
+        <a href="http://47.104.244.134:8080/cartlist.do">查看购物车详情 </a>
+    </li>
+    <li>
+        <a href="http://47.104.244.134:8080/usersave.do">注册用户 支持post 参数说明：username用户名 password密码 email邮箱 sex性别 </a>
+    </li>
+    <li>
+        <a href="http://47.104.244.134:8080/userlogin.do">用户登录 支持post 参数说明：username用户名 password密码 </a>
+    </li>
+    <li>
+        <a href="http://47.104.244.134:8080/userloginout.do">用户退出 </a>
+    </li>
+    <li>
+        <a href="http://47.104.244.134:8080/username.do?username=admin">检查用户是否存在 参数说明：username 用户名 </a>
+    </li>
+    <li>
+        <a href="http://47.104.244.134:8080/useremail.do?email=xingfei_work@163.com">检查邮箱是否存在 参数说明：email 邮箱 </a>
+    </li>
+
+
+</ul>
+</body>
+</html>

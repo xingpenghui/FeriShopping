@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.feri.mapper.OrderMapper">
+  <resultMap id="BaseResultMap" type="com.feri.domain.Order">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="money" jdbcType="INTEGER" property="money" />
+    <result column="aid" jdbcType="INTEGER" property="aid" />
+    <result column="uid" jdbcType="INTEGER" property="uid" />
+    <result column="flag" jdbcType="INTEGER" property="flag" />
+    <result column="createtime" jdbcType="TIMESTAMP" property="createtime" />
+  </resultMap>
+  <resultMap id="rm1" type="com.feri.vo.OrderVo">
+    <association property="order" javaType="com.feri.domain.Order">
+      <id column="id" jdbcType="INTEGER" property="id" />
+      <result column="money" jdbcType="INTEGER" property="money" />
+      <result column="aid" jdbcType="INTEGER" property="aid" />
+      <result column="uid" jdbcType="INTEGER" property="uid" />
+      <result column="flag" jdbcType="INTEGER" property="flag" />
+      <result column="createtime" jdbcType="TIMESTAMP" property="createtime" />
+    </association>
+    <association property="address" javaType="com.feri.domain.RecAddress">
+      <id property="id" column="aid"></id>
+      <result property="name" column="rname"></result>
+      <result property="phone" column="rphone"></result>
+      <result property="proname" column="proname"></result>
+      <result property="cityname" column="cityname"></result>
+      <result property="countyname" column="countyname"></result>
+      <result property="detail" column="detail"></result>
+    </association>
+    <collection property="orderItems" ofType="com.feri.domain.OrderItem">
+      <id property="id" column="oiid"></id>
+      <result property="count" column="oicount"></result>
+      <result property="money" column="oimoney"></result>
+      <association property="goods" javaType="com.feri.domain.Goods">
+        <id property="id" column="gid"></id>
+          <result property="price" column="gprice"></result>
+          <result property="flag" column="gflag"></result>
+          <result property="picurl" column="gpicurl"></result>
+          <result property="pubdate" column="gpubdate"></result>
+          <result property="name" column="gname"></result>
+          <result property="star" column="gstar"></result>
+      </association>
+
+    </collection>
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, money, aid, uid, flag, createtime
+  </sql>
+  <select id="selectById" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_order
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <insert id="insert" parameterType="com.feri.domain.Order" useGeneratedKeys="true" keyProperty="id">
+    insert into t_order (money, aid,
+      uid, flag, createtime
+      )
+    values (#{money,jdbcType=INTEGER}, #{aid,jdbcType=INTEGER},
+      #{uid,jdbcType=INTEGER}, 0, now()
+      )
+  </insert>
+
+  <update id="updateFlag">
+    update t_order set flag = #{flag} where id = #{id}
+  </update>
+  <select id="selectByUid" resultType="com.feri.domain.Order">
+    select id, money, aid, uid, flag, createtime from t_order where uid=#{uid} order by id limit #{page},#{count}
+  </select>
+  <select id="selectCount" resultType="int">
+    select count(*) from t_order where uid=#{uid}
+  </select>
+
+  <select id="queryById" resultMap="rm1">
+    select o.*,ra.name rname,ra.phone rphone,
+    p.name proname,ci.name cityname,co.name countyname,
+    oi.count oicount,oi.money oimoney,oi.id oiid,
+    g.name gname,g.price gprice,g.flag gflag,g.picurl gpicurl,g.star gstar,g.pubdate gpubdate ,g.id gid
+    from t_order o
+    left join t_recaddress ra on o.aid=ra.id
+    left join t_province p on ra.pid=p.id
+    left join t_city ci on ra.cityid=ci.id
+    left join t_county co on ra.countyid=co.id
+    left join t_orderitem oi on o.id=oi.oid
+    left join t_goods g on oi.gid=g.id
+    where o.id=#{oid}
+  </select>
+</mapper>

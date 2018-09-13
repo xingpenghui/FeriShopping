@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.feri.mapper.RecAddressMapper">
+  <resultMap id="BaseResultMap" type="com.feri.domain.RecAddress">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="phone" jdbcType="VARCHAR" property="phone" />
+    <result column="pid" jdbcType="INTEGER" property="pid" />
+    <result column="cityid" jdbcType="INTEGER" property="cityid" />
+    <result column="countyid" jdbcType="INTEGER" property="countyid" />
+    <result column="createtime" jdbcType="TIMESTAMP" property="createtime" />
+    <result column="ord" jdbcType="INTEGER" property="ord" />
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.feri.domain.RecAddress">
+    <result column="detail" jdbcType="LONGVARCHAR" property="detail" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, name, phone, pid, cityid, countyid, createtime, ord
+  </sql>
+  <sql id="Blob_Column_List">
+    detail
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="ResultMapWithBLOBs">
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from t_recaddress
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from t_recaddress
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.feri.domain.RecAddress">
+    insert into t_recaddress (name, phone,
+      pid, cityid, countyid, 
+      createtime, ord, detail,uid
+      )
+    values (#{name,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR},
+      #{pid,jdbcType=INTEGER}, #{cityid,jdbcType=INTEGER}, #{countyid,jdbcType=INTEGER}, 
+      now(), #{ord,jdbcType=INTEGER}, #{detail,jdbcType=LONGVARCHAR},#{uid}
+      )
+  </insert>
+
+  <select id="queryByUid" resultType="com.feri.domain.RecAddress">
+    select ra.*,p.name proname,ci.name cityname,co.name countyname from t_recaddress ra left join t_province p on ra.pid=p.id left join t_city ci on ra.cityid=ci.id left join t_county co on ra.countyid=co.id where ra.uid=#{uid}  order by ra.ord;
+  </select>
+
+  <update id="updateById" parameterType="com.feri.domain.RecAddress">
+    update t_recaddress
+    set name = #{name,jdbcType=VARCHAR},
+      phone = #{phone,jdbcType=VARCHAR},
+      pid = #{pid,jdbcType=INTEGER},
+      cityid = #{cityid,jdbcType=INTEGER},
+      countyid = #{countyid,jdbcType=INTEGER},
+      createtime = #{createtime,jdbcType=TIMESTAMP},
+      ord = #{ord,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>
